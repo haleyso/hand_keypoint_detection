@@ -3,7 +3,7 @@ import math
 
 import torch
 import torch.nn as nn
-from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
+from mmcv.cnn import ConvModule
 from mmengine.model import BaseModule
 
 from mmpose.registry import MODELS
@@ -52,7 +52,7 @@ class YOLOXPAFPN(BaseModule):
         self.in_channels = in_channels
         self.out_channels = out_channels
 
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
+        conv = ConvModule
 
         # build top-down blocks
         self.upsample = nn.Upsample(**upsample_cfg)

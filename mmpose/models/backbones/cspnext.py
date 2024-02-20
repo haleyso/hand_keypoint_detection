@@ -1,12 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
 from typing import Optional, Sequence, Tuple
+import sys
 
 import torch.nn as nn
-from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
+from mmcv.cnn import ConvModule
 from mmengine.model import BaseModule
 from torch import Tensor
 from torch.nn.modules.batchnorm import _BatchNorm
+from torchsummary import summary
 
 from mmpose.registry import MODELS
 from mmpose.utils.typing import ConfigType
@@ -98,9 +100,11 @@ class CSPNeXt(BaseModule):
 
         self.out_indices = out_indices
         self.frozen_stages = frozen_stages
+        self.use_depthwise = False
         self.use_depthwise = use_depthwise
         self.norm_eval = norm_eval
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
+        # print(use_depthwise)
+        # conv = ConvModule
         self.stem = nn.Sequential(
             ConvModule(
                 3,
@@ -134,7 +138,7 @@ class CSPNeXt(BaseModule):
             out_channels = int(out_channels * widen_factor)
             num_blocks = max(round(num_blocks * deepen_factor), 1)
             stage = []
-            conv_layer = conv(
+            conv_layer = ConvModule(
                 in_channels,
                 out_channels,
                 3,
@@ -187,9 +191,19 @@ class CSPNeXt(BaseModule):
 
     def forward(self, x: Tuple[Tensor, ...]) -> Tuple[Tensor, ...]:
         outs = []
+        # print(f'Start of CSPNeXt...................................')
+        # print(len(x)) # 256
+        # print(x[0].size()) # torch.Size([3, 256, 256])
+
+        # sys.exit()
+        # summary(self, x, col_names=("input_size", "output_size", "num_params"))
+        
         for i, layer_name in enumerate(self.layers):
             layer = getattr(self, layer_name)
+            # print(f' CSPNeXt -- {layer_name} :')
+            # summary(layer, x)
             x = layer(x)
             if i in self.out_indices:
                 outs.append(x)
         return tuple(outs)
+

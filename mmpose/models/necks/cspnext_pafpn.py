@@ -4,7 +4,7 @@ from typing import Sequence, Tuple
 
 import torch
 import torch.nn as nn
-from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
+from mmcv.cnn import ConvModule
 from mmengine.model import BaseModule
 from torch import Tensor
 
@@ -68,7 +68,7 @@ class CSPNeXtPAFPN(BaseModule):
         self.out_channels = out_channels
         self.out_indices = out_indices
 
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
+        conv = ConvModule
 
         # build top-down blocks
         self.upsample = nn.Upsample(**upsample_cfg)

@@ -2,6 +2,7 @@
 import inspect
 import logging
 import mimetypes
+import sys
 import os
 from collections import defaultdict
 from typing import (Callable, Dict, Generator, Iterable, List, Optional,
@@ -23,6 +24,7 @@ from mmengine.runner.checkpoint import _load_checkpoint_to_model
 from mmengine.structures import InstanceData
 from mmengine.utils import mkdir_or_exist
 from rich.progress import track
+from torchsummary import summary
 
 from mmpose.apis.inference import dataset_meta_from_config
 from mmpose.registry import DATASETS
@@ -126,6 +128,11 @@ class BaseMMPoseInferencer(BaseInferencer):
             cfg (Config or ConfigDict, optional): The loaded config.
         """
         if checkpoint is not None:
+            # print("model")
+            # print(summary(model))
+            # # print(model)
+            
+            # sys.exit()
             _load_checkpoint_to_model(model, checkpoint)
             checkpoint_meta = checkpoint.get('meta', {})
             # save the dataset_meta in the model for convenience

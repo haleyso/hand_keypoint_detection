@@ -2,12 +2,14 @@
 import argparse
 import os
 import os.path as osp
+import torch.onnx
 
 import mmengine
 from mmengine.config import Config, DictAction
 from mmengine.hooks import Hook
 from mmengine.runner import Runner
-
+import sys
+from quantization import qconfig, posit
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -17,6 +19,10 @@ def parse_args():
     parser.add_argument(
         '--work-dir', help='the directory to save evaluation results')
     parser.add_argument('--out', help='the file to save metric results.')
+    parser.add_argument(
+        '--quantize',
+        action='store_true',
+        help='whether to quantize with posit.')
     parser.add_argument(
         '--dump',
         type=str,
@@ -32,6 +38,9 @@ def parse_args():
     parser.add_argument(
         '--show-dir',
         help='directory where the visualization images will be saved.')
+    parser.add_argument(
+        '--save_onnx',
+        help='path to save onnx model to.')
     parser.add_argument(
         '--show',
         action='store_true',
@@ -147,6 +156,16 @@ def main():
 
     # build the runner from config
     runner = Runner.from_cfg(cfg)
+
+    # quantize with posit code
+    if args.quantize:
+        for param in runner.model.parameters():
+            param.data = posit.quantize_to_posit(param.data)
+
+    if args.save_onnx:
+        tensor_x = torch.rand((1, 3, 224, 224), dtype=torch.float32)
+        torch.onnx.export(runner.model, tensor_x, args.save_onnx)
+
 
     if args.out:
 

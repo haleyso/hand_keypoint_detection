@@ -33,7 +33,8 @@ def parse_args():
         '--input-shape',
         type=int,
         nargs='+',
-        default=[256, 192],
+        # default=[256, 192],
+        default=[256, 256],
         help='input image size')
     parser.add_argument(
         '--batch-size',

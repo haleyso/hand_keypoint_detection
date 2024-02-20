@@ -3,7 +3,7 @@ import math
 
 import torch
 import torch.nn as nn
-from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
+from mmcv.cnn import ConvModule
 from mmengine.model import BaseModule
 from torch.nn.modules.batchnorm import _BatchNorm
 
@@ -211,7 +211,7 @@ class CSPDarknet(BaseModule):
         self.frozen_stages = frozen_stages
         self.use_depthwise = use_depthwise
         self.norm_eval = norm_eval
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
+        conv = ConvModule
 
         self.stem = Focus(
             3,

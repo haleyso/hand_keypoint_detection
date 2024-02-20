@@ -116,7 +116,8 @@ class PoseLocalVisualizer(OpencvBackendVisualizer):
                  line_width: Union[int, float] = 1,
                  radius: Union[int, float] = 3,
                  show_keypoint_weight: bool = False,
-                 backend: str = 'opencv',
+                #  backend: str = 'opencv',
+                backend: str = 'matplotlib',
                  alpha: float = 1.0):
 
         warnings.filterwarnings(

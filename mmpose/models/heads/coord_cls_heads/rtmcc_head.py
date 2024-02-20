@@ -6,6 +6,8 @@ import torch
 from mmengine.dist import get_dist_info
 from mmengine.structures import PixelData
 from torch import Tensor, nn
+from torchsummary import summary
+import sys
 
 from mmpose.codecs.utils import get_simcc_normalized
 from mmpose.evaluation.functional import simcc_pck_accuracy
@@ -101,7 +103,8 @@ class RTMCCHead(BaseHead):
 
         # Define SimCC layers
         flatten_dims = self.in_featuremap_size[0] * self.in_featuremap_size[1]
-
+        # print(flatten_dims)
+        # sys.exit()
         self.final_layer = nn.Conv2d(
             in_channels,
             out_channels,
@@ -145,19 +148,32 @@ class RTMCCHead(BaseHead):
             pred_y (Tensor): 1d representation of y.
         """
         feats = feats[-1]
-
+        # print("Start of RTMCC head ..................................")
+        # print("final layer")
+        # summary(self.final_layer, feats)
         feats = self.final_layer(feats)  # -> B, K, H, W
 
         # flatten the output heatmap
+        # print("flatten layer")
+        # summary(torch.flatten, feats)
         feats = torch.flatten(feats, 2)
 
+        # print("mlp layer")
+        # summary(self.mlp, feats)
+        # print(feats.size())
+        # sys.exit()
         feats = self.mlp(feats)  # -> B, K, hidden
 
+        # print("gau layer")
+        # summary(self.gau, feats)
         feats = self.gau(feats)
 
+        # print("cls layer")
+        # summary(self.cls_x, feats)
+        # summary(self.cls_y, feats)
         pred_x = self.cls_x(feats)
         pred_y = self.cls_y(feats)
-
+        # sys.exit()
         return pred_x, pred_y
 
     def predict(
@@ -196,6 +212,7 @@ class RTMCCHead(BaseHead):
             flip_indices = batch_data_samples[0].metainfo['flip_indices']
             _feats, _feats_flip = feats
 
+            
             _batch_pred_x, _batch_pred_y = self.forward(_feats)
 
             _batch_pred_x_flip, _batch_pred_y_flip = self.forward(_feats_flip)
@@ -207,8 +224,9 @@ class RTMCCHead(BaseHead):
             batch_pred_x = (_batch_pred_x + _batch_pred_x_flip) * 0.5
             batch_pred_y = (_batch_pred_y + _batch_pred_y_flip) * 0.5
         else:
+            
             batch_pred_x, batch_pred_y = self.forward(feats)
-
+        # sys.exit()
         preds = self.decode((batch_pred_x, batch_pred_y))
 
         if test_cfg.get('output_heatmaps', False):
@@ -254,6 +272,9 @@ class RTMCCHead(BaseHead):
         """Calculate losses from a batch of inputs and data samples."""
 
         pred_x, pred_y = self.forward(feats)
+        # summary(self, feats, col_names=("input_size", "output_size", "num_params"))
+        # print(feats)
+        # sys.exit()
 
         gt_x = torch.cat([
             d.gt_instance_labels.keypoint_x_labels for d in batch_data_samples

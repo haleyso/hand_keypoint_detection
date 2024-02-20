@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from argparse import ArgumentParser
 from typing import Dict
+import sys
 
 from mmpose.apis.inferencers import MMPoseInferencer, get_model_aliases
 
@@ -209,6 +210,7 @@ def display_model_aliases(model_aliases: Dict[str, str]) -> None:
 
 def main():
     init_args, call_args, display_alias = parse_args()
+
     if display_alias:
         model_alises = get_model_aliases(init_args['scope'])
         display_model_aliases(model_alises)

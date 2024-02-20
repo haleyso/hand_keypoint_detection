@@ -106,6 +106,7 @@ class TopdownPoseEstimator(BasePoseEstimator):
         else:
             feats = self.extract_feat(inputs)
 
+
         preds = self.head.predict(feats, data_samples, test_cfg=self.test_cfg)
 
         if isinstance(preds, tuple):

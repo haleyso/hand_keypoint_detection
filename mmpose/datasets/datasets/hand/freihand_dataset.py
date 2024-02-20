@@ -3,7 +3,7 @@ import os.path as osp
 from typing import Optional
 
 import numpy as np
-
+import sys
 from mmpose.registry import DATASETS
 from ..base import BaseCocoStyleDataset
 
@@ -100,7 +100,8 @@ class FreiHandDataset(BaseCocoStyleDataset):
         img = raw_data_info['raw_img_info']
 
         img_path = osp.join(self.data_prefix['img'], img['file_name'])
-
+        # print(img_path)
+        # sys.exit()
         # use the entire image which is 224x224
         bbox = np.array([0, 0, 224, 224], dtype=np.float32).reshape(1, 4)
 

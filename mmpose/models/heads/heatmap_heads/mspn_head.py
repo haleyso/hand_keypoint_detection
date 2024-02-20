@@ -3,7 +3,7 @@ import copy
 from typing import List, Optional, Sequence, Union
 
 import torch
-from mmcv.cnn import (ConvModule, DepthwiseSeparableConvModule, Linear,
+from mmcv.cnn import (ConvModule, Linear,
                       build_activation_layer, build_norm_layer)
 from mmengine.structures import PixelData
 from torch import Tensor, nn
@@ -60,7 +60,7 @@ class PRM(nn.Module):
                 padding=0,
                 norm_cfg=norm_cfg,
                 inplace=False),
-            DepthwiseSeparableConvModule(
+            ConvModule(
                 self.out_channels,
                 1,
                 kernel_size=9,

@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
-from mmcv.cnn import ConvModule, DepthwiseSeparableConvModule
+from mmcv.cnn import ConvModule
 from mmengine.model import BaseModule
 from mmengine.utils import digit_version
 from torch import Tensor
@@ -74,7 +74,9 @@ class DarknetBottleneck(BaseModule):
                  init_cfg: OptMultiConfig = None) -> None:
         super().__init__(init_cfg=init_cfg)
         hidden_channels = int(out_channels * expansion)
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
+        # conv = ConvModule
+        print("hi")
+        time.sleep(6)
         self.conv1 = ConvModule(
             in_channels,
             hidden_channels,
@@ -82,7 +84,7 @@ class DarknetBottleneck(BaseModule):
             conv_cfg=conv_cfg,
             norm_cfg=norm_cfg,
             act_cfg=act_cfg)
-        self.conv2 = conv(
+        self.conv2 = ConvModule(
             hidden_channels,
             out_channels,
             3,
@@ -144,8 +146,8 @@ class CSPNeXtBlock(BaseModule):
                  init_cfg: OptMultiConfig = None) -> None:
         super().__init__(init_cfg=init_cfg)
         hidden_channels = int(out_channels * expansion)
-        conv = DepthwiseSeparableConvModule if use_depthwise else ConvModule
-        self.conv1 = conv(
+        # conv = ConvModule
+        self.conv1 = ConvModule(
             in_channels,
             hidden_channels,
             3,
@@ -153,7 +155,7 @@ class CSPNeXtBlock(BaseModule):
             padding=1,
             norm_cfg=norm_cfg,
             act_cfg=act_cfg)
-        self.conv2 = DepthwiseSeparableConvModule(
+        self.conv2 = ConvModule(
             hidden_channels,
             out_channels,
             kernel_size,
@@ -170,6 +172,8 @@ class CSPNeXtBlock(BaseModule):
         identity = x
         out = self.conv1(x)
         out = self.conv2(out)
+
+        # print("block:" , out.size(), identity.size())
 
         if self.add_identity:
             return out + identity
@@ -267,7 +271,7 @@ class CSPLayer(BaseModule):
         x_main = self.blocks(x_main)
 
         x_final = torch.cat((x_main, x_short), dim=1)
-
         if self.channel_attention:
             x_final = self.attention(x_final)
+        
         return self.final_conv(x_final)

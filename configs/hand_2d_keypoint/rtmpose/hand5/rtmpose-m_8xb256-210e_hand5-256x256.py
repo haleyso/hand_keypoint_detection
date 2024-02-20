@@ -1,3 +1,8 @@
+import sys
+# import resource
+# rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
+# resource.setrlimit(resource.RLIMIT_NOFILE, (2048, rlimit[1]))
+
 _base_ = ['../../../_base_/default_runtime.py']
 
 # coco-hand onehand10k freihand2d rhd2d halpehand
@@ -36,7 +41,8 @@ param_scheduler = [
 ]
 
 # automatically scaling LR based on the actual training batch size
-auto_scale_lr = dict(base_batch_size=256)
+# auto_scale_lr = dict(base_batch_size=256)
+auto_scale_lr = dict(base_batch_size=24)
 
 # codec settings
 codec = dict(
@@ -56,7 +62,7 @@ model = dict(
         std=[58.395, 57.12, 57.375],
         bgr_to_rgb=True),
     backbone=dict(
-        _scope_='mmdet',
+        _scope_='mmpose',
         type='CSPNeXt',
         arch='P5',
         expand_ratio=0.5,
@@ -100,7 +106,7 @@ model = dict(
 # base dataset settings
 dataset_type = 'CocoWholeBodyHandDataset'
 data_mode = 'topdown'
-data_root = 'data/'
+data_root = '/home/haleyso/mmpose/data/'
 
 backend_args = dict(backend='local')
 
@@ -171,6 +177,7 @@ train_pipeline_stage2 = [
     dict(type='PackPoseInputs')
 ]
 
+
 # train datasets
 dataset_coco = dict(
     type=dataset_type,
@@ -186,7 +193,7 @@ dataset_onehand10k = dict(
     data_root=data_root,
     data_mode=data_mode,
     ann_file='onehand10k/annotations/onehand10k_train.json',
-    data_prefix=dict(img='pose/OneHand10K/'),
+    data_prefix=dict(img='onehand10k/'),
     pipeline=[],
 )
 
@@ -195,7 +202,7 @@ dataset_freihand = dict(
     data_root=data_root,
     data_mode=data_mode,
     ann_file='freihand/annotations/freihand_train.json',
-    data_prefix=dict(img='pose/FreiHand/'),
+    data_prefix=dict(img='freihand/'),
     pipeline=[],
 )
 
@@ -247,7 +254,8 @@ dataset_halpehand = dict(
 # data loaders
 train_dataloader = dict(
     batch_size=256,
-    num_workers=10,
+    # batch_size=24,
+    num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -255,8 +263,9 @@ train_dataloader = dict(
         metainfo=dict(
             from_file='configs/_base_/datasets/coco_wholebody_hand.py'),
         datasets=[
-            dataset_coco, dataset_onehand10k, dataset_freihand, dataset_rhd,
-            dataset_halpehand
+            # dataset_onehand10k
+            dataset_freihand
+            # , dataset_rhd,dataset_coco, dataset_onehand10k, dataset_halpehand
         ],
         pipeline=train_pipeline,
         test_mode=False,
@@ -277,7 +286,7 @@ val_onehand10k = dict(
     data_root=data_root,
     data_mode=data_mode,
     ann_file='onehand10k/annotations/onehand10k_test.json',
-    data_prefix=dict(img='pose/OneHand10K/'),
+    data_prefix=dict(img='onehand10k/'),
     pipeline=[],
 )
 
@@ -285,8 +294,8 @@ val_freihand = dict(
     type='FreiHandDataset',
     data_root=data_root,
     data_mode=data_mode,
-    ann_file='freihand/annotations/freihand_test.json',
-    data_prefix=dict(img='pose/FreiHand/'),
+    ann_file='freihand/annotations/freihand_train.json',
+    data_prefix=dict(img='freihand/'),
     pipeline=[],
 )
 
@@ -337,7 +346,8 @@ val_halpehand = dict(
 
 test_dataloader = dict(
     batch_size=32,
-    num_workers=10,
+    # batch_size=12,
+    num_workers=2,
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
@@ -346,7 +356,9 @@ test_dataloader = dict(
         metainfo=dict(
             from_file='configs/_base_/datasets/coco_wholebody_hand.py'),
         datasets=[
-            val_coco, val_onehand10k, val_freihand, val_rhd, val_halpehand
+            # val_onehand10k
+            val_freihand
+            # val_coco, val_onehand10k, val_rhd, val_halpehand
         ],
         pipeline=val_pipeline,
         test_mode=True,
@@ -373,7 +385,7 @@ custom_hooks = [
 
 # evaluators
 val_evaluator = [
-    dict(type='PCKAccuracy', thr=0.2),
+    dict(type='PCKAccuracy', thr=0.05),
     dict(type='AUC'),
     dict(type='EPE')
 ]

@@ -2,7 +2,9 @@
 import argparse
 import os
 import os.path as osp
+import sys
 
+import mmpose.registry
 from mmengine.config import Config, DictAction
 from mmengine.runner import Runner
 
@@ -72,7 +74,8 @@ def parse_args():
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
-
+    # print(os.environ["CUDA_VISIBLE_DEVICES"])
+    # sys.exit()
     return args
 
 

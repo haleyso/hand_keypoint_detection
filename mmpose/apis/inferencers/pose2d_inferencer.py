@@ -16,6 +16,8 @@ from mmpose.evaluation.functional import nearby_joints_nms, nms
 from mmpose.registry import INFERENCERS
 from mmpose.structures import merge_data_samples
 from .base_mmpose_inferencer import BaseMMPoseInferencer
+from torchsummary import summary
+import sys
 
 InstanceList = List[InstanceData]
 InputType = Union[str, np.ndarray]
@@ -94,11 +96,15 @@ class Pose2DInferencer(BaseMMPoseInferencer):
         # assign dataset metainfo to self.visualizer
         self.visualizer.set_dataset_meta(self.model.dataset_meta)
 
+        # print(det_model)
+        # sys.exit()
         # initialize detector for top-down models
         if self.cfg.data_mode == 'topdown':
             self._init_detector(
                 det_model=det_model,
                 det_weights=det_weights,
+                # det_model= model,
+                # det_weights= weights,
                 det_cat_ids=det_cat_ids,
                 device=device,
             )
@@ -231,6 +237,15 @@ class Pose2DInferencer(BaseMMPoseInferencer):
         Returns:
             A list of data samples with prediction instances.
         """
+        
+        # print(summary(self.model, inputs['inputs'][0].shape))
+        # sys.exit()
+        #summary(self.model.backbone, inputs['inputs'][0].shape)
+        #tensor_x = torch.rand((128, 3, 256, 256), dtype=torch.float32).cuda()
+        #export_output = torch.onnx.dynamo_export(self.model.backbone, tensor_x)
+        #export_output.save('rtm_dynamo.onnx')
+        #torch.onnx.export(self.model.backbone, tensor_x, "rtm.onnx")
+
         data_samples = self.model.test_step(inputs)
         if self.cfg.data_mode == 'topdown' and merge_results:
             data_samples = [merge_data_samples(data_samples)]

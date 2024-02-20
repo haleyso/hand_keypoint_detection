@@ -8,6 +8,7 @@ from mmengine.config import Config, ConfigDict
 from mmengine.infer.infer import ModelType
 from mmengine.structures import InstanceData
 from rich.progress import track
+import sys
 
 from .base_mmpose_inferencer import BaseMMPoseInferencer
 from .hand3d_inferencer import Hand3DInferencer
@@ -82,6 +83,7 @@ class MMPoseInferencer(BaseMMPoseInferencer):
                  det_cat_ids: Optional[Union[int, List]] = None,
                  show_progress: bool = False) -> None:
 
+
         self.visualizer = None
         self.show_progress = show_progress
         if pose3d is not None:
@@ -128,6 +130,7 @@ class MMPoseInferencer(BaseMMPoseInferencer):
         Returns:
             Dict: The prediction results. Possibly with keys "pose2d".
         """
+
         return self.inferencer.forward(inputs, **forward_kwargs)
 
     def __call__(

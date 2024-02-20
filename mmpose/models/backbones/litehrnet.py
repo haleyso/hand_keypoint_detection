@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
-from mmcv.cnn import (ConvModule, DepthwiseSeparableConvModule,
+from mmcv.cnn import (ConvModule,
                       build_conv_layer, build_norm_layer)
 from mmengine.model import BaseModule
 from torch.nn.modules.batchnorm import _BatchNorm
@@ -362,7 +362,7 @@ class IterativeHead(BaseModule):
         for i in range(num_branchs):
             if i != num_branchs - 1:
                 projects.append(
-                    DepthwiseSeparableConvModule(
+                    ConvModule(
                         in_channels=self.in_channels[i],
                         out_channels=self.in_channels[i + 1],
                         kernel_size=3,
@@ -374,7 +374,7 @@ class IterativeHead(BaseModule):
                         pw_act_cfg=dict(type='ReLU')))
             else:
                 projects.append(
-                    DepthwiseSeparableConvModule(
+                    ConvModule(
                         in_channels=self.in_channels[i],
                         out_channels=self.in_channels[i],
                         kernel_size=3,
