@@ -8,7 +8,7 @@ _base_ = ['../../../_base_/default_runtime.py']
 # coco-hand onehand10k freihand2d rhd2d halpehand
 
 # runtime
-max_epochs = 210
+max_epochs = 10000
 stage2_num_epochs = 10
 base_lr = 4e-3
 
@@ -253,9 +253,9 @@ dataset_halpehand = dict(
 
 # data loaders
 train_dataloader = dict(
-    batch_size=256,
+    batch_size=4,
     # batch_size=24,
-    num_workers=4,
+    num_workers=1,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -345,9 +345,9 @@ val_halpehand = dict(
 )
 
 test_dataloader = dict(
-    batch_size=32,
+    batch_size=4,
     # batch_size=12,
-    num_workers=2,
+    num_workers=1,
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),

@@ -157,6 +157,9 @@ def main():
     # build the runner from config
     runner = Runner.from_cfg(cfg)
 
+    print(runner.model)
+    # sys.exit()
+
     # quantize with posit code
     if args.quantize:
         for param in runner.model.parameters():
