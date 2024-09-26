@@ -129,6 +129,6 @@ docs/**/modelzoo.md
 
 vis_results/
 # Pytorch
-*.pth
+# *.pth
 
 *.DS_Store
