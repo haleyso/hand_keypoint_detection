@@ -165,8 +165,10 @@ def main():
         for param in runner.model.parameters():
             param.data = posit.quantize_to_posit(param.data)
 
+        # print(param.device)
+        # sys.exit()
     if args.save_onnx:
-        tensor_x = torch.rand((1, 3, 224, 224), dtype=torch.float32)
+        tensor_x = torch.rand((1, 3, 256, 256), dtype=torch.float32)#.to('cuda')
         torch.onnx.export(runner.model, tensor_x, args.save_onnx)
 
 

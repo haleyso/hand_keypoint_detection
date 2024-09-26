@@ -252,7 +252,8 @@ class RTMCCBlock(nn.Module):
                 bias = self.rel_pos_bias(q.size(1), k.size(1))
             qk += bias[:, :q.size(1), :k.size(1)]
         # [B, K, K]
-        kernel = torch.square(F.relu(qk / self.sqrt_s))
+        # kernel = torch.square(F.relu(qk / self.sqrt_s))
+        kernel = (F.relu(qk / self.sqrt_s))**2
 
         if self.dropout_rate > 0.:
             kernel = self.dropout(kernel)

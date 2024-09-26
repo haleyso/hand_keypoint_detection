@@ -412,7 +412,11 @@ class ScaleNorm(nn.Module):
         if torch.onnx.is_in_onnx_export() and \
                 digit_version(TORCH_VERSION) >= digit_version('1.12'):
 
-            norm = torch.linalg.norm(x, dim=-1, keepdim=True)
+            # norm = torch.linalg.norm(x, dim=-1, keepdim=True)
+
+            squared = x**2
+            summed = torch.sum(squared, dim=-1, keepdim=True)
+            norm = torch.sqrt(summed)
 
         else:
             norm = torch.norm(x, dim=-1, keepdim=True)
@@ -734,7 +738,8 @@ class GAUEncoder(BaseModule):
         qk = torch.matmul(q, k.transpose(-1, -2))
 
         # [B, K, K]
-        kernel = torch.square(F.relu(qk / self.sqrt_s))
+        # kernel = torch.square(F.relu(qk / self.sqrt_s))
+        kernel = (F.relu(qk / self.sqrt_s))**2
 
         if mask is not None:
             kernel = kernel * mask

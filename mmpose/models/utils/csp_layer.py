@@ -222,7 +222,8 @@ class CSPLayer(BaseModule):
                  norm_cfg: ConfigType = dict(
                      type='BN', momentum=0.03, eps=0.001),
                  act_cfg: ConfigType = dict(type='Swish'),
-                 init_cfg: OptMultiConfig = None) -> None:
+                 init_cfg: OptMultiConfig = None,
+                 ksize=5) -> None:
         super().__init__(init_cfg=init_cfg)
         block = CSPNeXtBlock if use_cspnext_block else DarknetBottleneck
         mid_channels = int(out_channels * expand_ratio)
@@ -256,6 +257,7 @@ class CSPLayer(BaseModule):
                 1.0,
                 add_identity,
                 use_depthwise,
+                kernel_size=ksize,
                 conv_cfg=conv_cfg,
                 norm_cfg=norm_cfg,
                 act_cfg=act_cfg) for _ in range(num_blocks)

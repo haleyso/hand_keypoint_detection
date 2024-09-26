@@ -151,8 +151,9 @@ class RTMCCHead(BaseHead):
         # print("Start of RTMCC head ..................................")
         # print("final layer")
         # summary(self.final_layer, feats)
+        # print(f'rtmcc head feats in {feats.size()}')
         feats = self.final_layer(feats)  # -> B, K, H, W
-
+        # print(f'rtmcc final layer {feats.size()}')
         # flatten the output heatmap
         # print("flatten layer")
         # summary(torch.flatten, feats)
@@ -174,6 +175,7 @@ class RTMCCHead(BaseHead):
         pred_x = self.cls_x(feats)
         pred_y = self.cls_y(feats)
         # sys.exit()
+        # print(f'Output: {pred_x.size()}, {pred_y.size()}')
         return pred_x, pred_y
 
     def predict(

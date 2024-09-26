@@ -85,7 +85,9 @@ class CSPNeXt(BaseModule):
             a=math.sqrt(5),
             distribution='uniform',
             mode='fan_in',
-            nonlinearity='leaky_relu')
+            nonlinearity='leaky_relu'),
+        ksize=5,
+        first_k_size=3,
     ) -> None:
         super().__init__(init_cfg=init_cfg)
         arch_setting = self.arch_settings[arch]
@@ -97,6 +99,10 @@ class CSPNeXt(BaseModule):
             raise ValueError('frozen_stages must be in range(-1, '
                              'len(arch_setting) + 1). But received '
                              f'{frozen_stages}')
+        
+
+        # print(f"ksize: {ksize} and the spp {spp_kernel_sizes}")
+        # sys.exit()
 
         self.out_indices = out_indices
         self.frozen_stages = frozen_stages
@@ -109,8 +115,8 @@ class CSPNeXt(BaseModule):
             ConvModule(
                 3,
                 int(arch_setting[0][0] * widen_factor // 2),
-                3,
-                padding=1,
+                first_k_size,
+                padding=(first_k_size-1)//2, 
                 stride=2,
                 norm_cfg=norm_cfg,
                 act_cfg=act_cfg),
@@ -168,7 +174,8 @@ class CSPNeXt(BaseModule):
                 channel_attention=channel_attention,
                 conv_cfg=conv_cfg,
                 norm_cfg=norm_cfg,
-                act_cfg=act_cfg)
+                act_cfg=act_cfg,
+                ksize=ksize)
             stage.append(csp_layer)
             self.add_module(f'stage{i + 1}', nn.Sequential(*stage))
             self.layers.append(f'stage{i + 1}')
@@ -202,7 +209,10 @@ class CSPNeXt(BaseModule):
             layer = getattr(self, layer_name)
             # print(f' CSPNeXt -- {layer_name} :')
             # summary(layer, x)
+            # print(f'{i} BEFORE {x.size()} ')
             x = layer(x)
+            # print(f'{i} AFTER {x.size()} ')
+            
             if i in self.out_indices:
                 outs.append(x)
         return tuple(outs)
