@@ -110,7 +110,7 @@ class FusedAmaxObsFakeQuantize(nn.Module):
             exp = torch.floor(torch.log2(self.quant_max / amax))
             # sf = torch.pow(2, torch.clamp(exp, min=0)) # replace to not use torch.clamp and torch.pow
             mini = 0
-            sf = torch.square(torch.maximum(exp, torch.tensor(mini)))   
+            sf = torch.pow(2, torch.maximum(exp, torch.tensor(mini)))   
             sf = torch.where(amax > 0.0, sf, 1.0)
             sf = torch.where(torch.isfinite(amax), sf, 1.0)
             x = self.fake_quant(x_orig * sf) / sf

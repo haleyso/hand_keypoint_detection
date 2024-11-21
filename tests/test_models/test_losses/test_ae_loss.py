@@ -83,7 +83,8 @@ class AELoss(nn.Module):
         diff = A - B
 
         if self.loss_type == 'exp':
-            diff = torch.pow(diff, 2)
+            # diff = torch.pow(diff, 2)
+            diff = torch.square(diff)
             push = torch.exp(-diff)
             push = torch.sum(push)
         elif self.loss_type == 'max':

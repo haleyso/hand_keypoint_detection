@@ -49,7 +49,8 @@ class SoftmaxFunction(Function):
             # Softmax gradient with posit reciprocal approximation
             grad_input = output * grad_output
             sum_grad = torch.sum(exp_x * grad_output, dim=-1, keepdims=True)
-            deriv = torch.pow(2, torch.floor(torch.log2(exp_x_sum)) * -2 - 1)
+            deriv = torch.pow(2, torch.floor(torch.log2(exp_x_sum)) * -2 - 1) 
+            
             grad_input -= deriv * exp_x * sum_grad
 
             # deriv = -torch.pow(2, torch.floor(torch.log2(exp_x_sum)) * -2 - 1)
