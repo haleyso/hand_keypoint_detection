@@ -188,9 +188,10 @@ class WindowAttention(nn.Module):
         # cosine attention
         attn = (
             F.normalize(q, dim=-1) @ F.normalize(k, dim=-1).transpose(-2, -1))
-        logit_scale = torch.clamp(
-            self.logit_scale,
-            max=torch.log(torch.tensor(1. / 0.01, device=x.device))).exp()
+        # logit_scale = torch.clamp(self.logit_scale, max=torch.log(torch.tensor(1. / 0.01, device=x.device))).exp() # replace to not use torch.clamp
+        maxi = torch.log(torch.tensor(1. / 0.01, device=x.device))
+        logit_scale = torch.minimum(self.logit_scale, maxi).exp()
+        
         attn = attn * logit_scale
 
         relative_position_bias_table = self.cpb_mlp(

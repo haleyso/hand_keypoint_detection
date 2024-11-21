@@ -34,12 +34,17 @@ def quantize_to_posit(
     rb &= ~inward_projection
 
     # Adjust exponent value
-    es_bits = torch.clamp(nbits - 2 - run, min=0, max=es)
+    # es_bits = torch.clamp(nbits - 2 - run, min=0, max=es) # replace to not use torch.clamp
+    mini = 0
+    es_bits = torch.maximum(torch.minimum(es_bits, es), torch.tensor(mini))
     scale -= exponent & ((1 << (es - es_bits)) - 1)
-    scale = torch.clamp(scale, min=-max_scale, max=max_scale)
+    # scale = torch.clamp(scale, min=-max_scale, max=max_scale)
 
     # Mask out extra fraction bits
-    nf_trunc = torch.clamp(len - nbits, min=0, max=23)
+    # nf_trunc = torch.clamp(len - nbits, min=0, max=23) # replace to not use torch.clamp
+    mini = 0
+    maxi = 23
+    nf_trunc = torch.maximum(torch.minimum(nf_trunc, torch.tensor(maxi)), torch.tensor(mini))
     bit_mask = torch.tensor(-1, dtype=torch.int32, device=input_tensor.device) << nf_trunc
     output = (fraction & bit_mask) | ((scale + 127) << 23)
 

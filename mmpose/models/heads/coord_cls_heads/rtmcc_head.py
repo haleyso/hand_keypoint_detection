@@ -61,6 +61,7 @@ class RTMCCHead(BaseHead):
         self,
         in_channels: Union[int, Sequence[int]],
         out_channels: int,
+        minotaur_pad: None,
         input_size: Tuple[int, int],
         in_featuremap_size: Tuple[int, int],
         simcc_split_ratio: float = 2.0,
@@ -86,6 +87,8 @@ class RTMCCHead(BaseHead):
 
         self.in_channels = in_channels
         self.out_channels = out_channels
+        # print(self.out_channels, self.in_channels)
+        # sys.exit()
         self.input_size = input_size
         self.in_featuremap_size = in_featuremap_size
         self.simcc_split_ratio = simcc_split_ratio
@@ -105,9 +108,13 @@ class RTMCCHead(BaseHead):
         flatten_dims = self.in_featuremap_size[0] * self.in_featuremap_size[1]
         # print(flatten_dims)
         # sys.exit()
+
+        if minotaur_pad == None:
+            minotaur_pad = self.out_channels
         self.final_layer = nn.Conv2d(
             in_channels,
-            out_channels,
+            # out_channels,
+            minotaur_pad,
             kernel_size=final_layer_kernel_size,
             stride=1,
             padding=final_layer_kernel_size // 2)
@@ -119,7 +126,8 @@ class RTMCCHead(BaseHead):
         H = int(self.input_size[1] * self.simcc_split_ratio)
 
         self.gau = RTMCCBlock(
-            self.out_channels,
+            # self.out_channels,
+            minotaur_pad,
             gau_cfg['hidden_dims'],
             gau_cfg['hidden_dims'],
             s=gau_cfg['s'],
@@ -168,6 +176,7 @@ class RTMCCHead(BaseHead):
         # print("gau layer")
         # summary(self.gau, feats)
         feats = self.gau(feats)
+        # print(feats.size()) #torch.Size([24, 21, 256])
 
         # print("cls layer")
         # summary(self.cls_x, feats)
@@ -176,7 +185,11 @@ class RTMCCHead(BaseHead):
         pred_y = self.cls_y(feats)
         # sys.exit()
         # print(f'Output: {pred_x.size()}, {pred_y.size()}')
-        return pred_x, pred_y
+        # print(f'Output: {pred_x[:,:self.out_channels,:].size()}, {pred_y[:,:self.out_channels,:].size()}')
+        # sys.exit()
+        # torch.Size([24, 21, 256])
+        # Output: torch.Size([24, 21, 448]), torch.Size([24, 21, 448])
+        return pred_x[:,:self.out_channels,:], pred_y[:,:self.out_channels,:]
 
     def predict(
         self,

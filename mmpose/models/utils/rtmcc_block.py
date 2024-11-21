@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from mmcv.cnn.bricks import DropPath
 from mmengine.utils import digit_version
 from mmengine.utils.dl_utils import TORCH_VERSION
+import sys
 
 from .transformer import ScaleNorm
 
@@ -202,7 +203,10 @@ class RTMCCBlock(nn.Module):
         else:
             a = rope(self.a.repeat(seq_len, 1), dim=0)
             b = rope(self.b.repeat(k_len, 1), dim=0)
+            print("HELLO 1")
             t = torch.bmm(a, b.permute(0, 2, 1))
+            print(a.size(), b.size(), b.permute(0,2,1).size(), t.size())
+            sys.exit()
         return t
 
     def _forward(self, inputs):
@@ -243,7 +247,11 @@ class RTMCCBlock(nn.Module):
 
         # [B, K, s].permute() -> [B, s, K]
         # [B, K, s] x [B, s, K] -> [B, K, K]
-        qk = torch.bmm(q, k.permute(0, 2, 1))
+        # print("HELLO 2")
+        # qk = torch.bmm(q, k.permute(0, 2, 1))
+        qk = torch.matmul(q, k.permute(0, 2, 1)) # non bmm version
+        # print(q.size(), k.size(), k.permute(0,2,1).size(), qk.size())
+        # sys.exit()
 
         if self.use_rel_bias:
             if self.attn_type == 'self-attn':
@@ -258,7 +266,11 @@ class RTMCCBlock(nn.Module):
         if self.dropout_rate > 0.:
             kernel = self.dropout(kernel)
         # [B, K, K] x [B, K, e] -> [B, K, e]
-        x = u * torch.bmm(kernel, v)
+        # print("HELLO 3")
+        # x = u * torch.bmm(kernel, v)
+        x = u * torch.matmul(kernel, v) # non bmm version
+        # print(kernel.size(), v.size(), u.size(), x.size())
+        # sys.exit()
         # [B, K, e] -> [B, K, out_token_dims]
         x = self.o(x)
 

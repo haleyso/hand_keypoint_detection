@@ -666,7 +666,10 @@ class SemiSupervisionLoss(nn.Module):
             intrinsics.unsqueeze_(1)
         f = intrinsics[..., :2]
         c = intrinsics[..., 2:4]
-        _x = torch.clamp(x[:, :, :2] / x[:, :, 2:], -1, 1)
+        # _x = torch.clamp(x[:, :, :2] / x[:, :, 2:], -1, 1) # replace to not use torch.clamp 
+        mini = -1
+        maxi = 1
+        _x = torch.maximum(torch.minimum(x[:, :, :2] / x[:, :, 2:], torch.tensor(maxi)), torch.tensor(mini))
         if intrinsics.shape[-1] == 9:
             k = intrinsics[..., 4:7]
             p = intrinsics[..., 7:9]

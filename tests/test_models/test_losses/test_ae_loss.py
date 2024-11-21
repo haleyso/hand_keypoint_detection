@@ -88,7 +88,9 @@ class AELoss(nn.Module):
             push = torch.sum(push)
         elif self.loss_type == 'max':
             diff = 1 - torch.abs(diff)
-            push = torch.clamp(diff, min=0).sum() - num_tags
+            # push = torch.clamp(diff, min=0).sum() - num_tags # replace to not use torch.clamp
+            mini = 0
+            push = torch.maximum(diff, torch.tensor(mini)).sum() - num_tags
         else:
             raise ValueError('Unknown ae loss type')
 

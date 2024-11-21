@@ -44,7 +44,9 @@ def norm_targets(targets, patch_size):
 
     targets_var = (targets_square_mean - targets_mean**2.) * (
         targets_count / (targets_count - 1))
-    targets_var = torch.clamp(targets_var, min=0.)
+    # targets_var = torch.clamp(targets_var, min=0.) # replace to not use torch.clamp
+    mini = 0
+    targets_var = torch.maximum(targets_var, torch.tensor(mini))
 
     targets_ = (targets_ - targets_mean) / (targets_var + 1.e-6)**0.5
 

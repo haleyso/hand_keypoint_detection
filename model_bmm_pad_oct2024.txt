@@ -1,0 +1,726 @@
+==============================
+Input shape: (1, 3, 224, 224)
+Flops: 0.792G
+Params: 5.233M
+==============================
+
++----------------------------+----------------------+------------+--------------+
+| module                     | #parameters or shape | #flops     | #activations |
++----------------------------+----------------------+------------+--------------+
+| model                      | 5.233M               | 0.792G     | 2.409M       |
+|  backbone                  |  4.416M              |  0.763G    |  2.308M      |
+|   backbone.stem            |   9.392K             |   0.118G   |   0.803M     |
+|    backbone.stem.0         |    2.384K            |    29.905M |    0.201M    |
+|    backbone.stem.1         |    2.336K            |    29.303M |    0.201M    |
+|    backbone.stem.2         |    4.672K            |    58.606M |    0.401M    |
+|   backbone.stage1          |   40.384K            |   0.127G   |   0.702M     |
+|    backbone.stage1.0       |    18.56K            |    58.204M |    0.201M    |
+|    backbone.stage1.1       |    21.824K           |    68.44M  |    0.502M    |
+|   backbone.stage2          |   0.231M             |   0.181G   |   0.452M     |
+|    backbone.stage2.0       |    73.984K           |    58.003M |    0.1M      |
+|    backbone.stage2.1       |    0.157M            |    0.123G  |    0.351M    |
+|   backbone.stage3          |   0.92M              |   0.18G    |   0.226M     |
+|    backbone.stage3.0       |    0.295M            |    57.903M |    50.176K   |
+|    backbone.stage3.1       |    0.624M            |    0.122G  |    0.176M    |
+|   backbone.stage4          |   3.216M             |   0.158G   |   0.125M     |
+|    backbone.stage4.0       |    1.181M            |    57.853M |    25.088K   |
+|    backbone.stage4.1       |    0.657M            |    32.188M |    37.632K   |
+|    backbone.stage4.2       |    1.379M            |    67.562M |    62.72K    |
+|  head                      |  0.816M              |  29.254M   |  0.101M      |
+|   head.final_layer         |   0.147M             |   7.225M   |   1.568K     |
+|    head.final_layer.weight |    (32, 512, 3, 3)   |            |              |
+|    head.final_layer.bias   |    (32,)             |            |              |
+|   head.mlp                 |   12.545K            |   0.401M   |   8.192K     |
+|    head.mlp.0              |    1                 |    0       |    0         |
+|    head.mlp.1              |    12.544K           |    0.401M  |    8.192K    |
+|   head.gau                 |   0.427M             |   14.287M  |   62.464K    |
+|    head.gau.gamma          |    (2, 128)          |            |              |
+|    head.gau.beta           |    (2, 128)          |            |              |
+|    head.gau.o              |    0.131M            |    4.194M  |    8.192K    |
+|    head.gau.uv             |    0.295M            |    9.437M  |    36.864K   |
+|    head.gau.ln             |    1                 |    0       |    0         |
+|    head.gau.res_scale      |    0.256K            |    0       |    0         |
+|   head.cls_x               |   0.115M             |   3.67M    |   14.336K    |
+|    head.cls_x.weight       |    (448, 256)        |            |              |
+|   head.cls_y               |   0.115M             |   3.67M    |   14.336K    |
+|    head.cls_y.weight       |    (448, 256)        |            |              |
++----------------------------+----------------------+------------+--------------+
+
+
+N/A indicates a possibly missing statistic due to how the module was called. Missing values are still included in the parent's total.
+TopdownPoseEstimator(
+  #params: 5.23M, #flops: 0.79G, #acts: 2.41M
+  (data_preprocessor): PoseDataPreprocessor(#params: 0, #flops: N/A, #acts: N/A)
+  (backbone): CSPNeXt(
+    #params: 4.42M, #flops: 0.76G, #acts: 2.31M
+    (stem): Sequential(
+      #params: 9.39K, #flops: 0.12G, #acts: 0.8M
+      (0): ConvModule(
+        #params: 2.38K, #flops: 29.9M, #acts: 0.2M
+        (conv): Conv2d(
+          3, 16, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+          #params: 2.35K, #flops: 29.5M, #acts: 0.2M
+        )
+        (bn): _BatchNormXd(
+          16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 32, #flops: 0.4M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (1): ConvModule(
+        #params: 2.34K, #flops: 29.3M, #acts: 0.2M
+        (conv): Conv2d(
+          16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          #params: 2.3K, #flops: 28.9M, #acts: 0.2M
+        )
+        (bn): _BatchNormXd(
+          16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 32, #flops: 0.4M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (2): ConvModule(
+        #params: 4.67K, #flops: 58.61M, #acts: 0.4M
+        (conv): Conv2d(
+          16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          #params: 4.61K, #flops: 57.8M, #acts: 0.4M
+        )
+        (bn): _BatchNormXd(
+          32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 64, #flops: 0.8M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+    )
+    (stage1): Sequential(
+      #params: 40.38K, #flops: 0.13G, #acts: 0.7M
+      (0): ConvModule(
+        #params: 18.56K, #flops: 58.2M, #acts: 0.2M
+        (conv): Conv2d(
+          32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          #params: 18.43K, #flops: 57.8M, #acts: 0.2M
+        )
+        (bn): _BatchNormXd(
+          64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 0.13K, #flops: 0.4M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (1): CSPLayer(
+        #params: 21.82K, #flops: 68.44M, #acts: 0.5M
+        (main_conv): ConvModule(
+          #params: 1.06K, #flops: 3.31M, #acts: 50.18K
+          (conv): Conv2d(
+            64, 16, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 1.02K, #flops: 3.21M, #acts: 50.18K
+          )
+          (bn): _BatchNormXd(
+            16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 32, #flops: 0.1M, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (short_conv): ConvModule(
+          #params: 1.06K, #flops: 3.31M, #acts: 50.18K
+          (conv): Conv2d(
+            64, 16, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 1.02K, #flops: 3.21M, #acts: 50.18K
+          )
+          (bn): _BatchNormXd(
+            16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 32, #flops: 0.1M, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (final_conv): ConvModule(
+          #params: 2.18K, #flops: 6.82M, #acts: 0.2M
+          (conv): Conv2d(
+            32, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 2.05K, #flops: 6.42M, #acts: 0.2M
+          )
+          (bn): _BatchNormXd(
+            64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.13K, #flops: 0.4M, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (blocks): Sequential(
+          #params: 17.54K, #flops: 54.99M, #acts: 0.2M
+          (0): CSPNeXtBlock(
+            #params: 8.77K, #flops: 27.5M, #acts: 0.1M
+            (conv1): ConvModule(
+              #params: 2.34K, #flops: 7.33M, #acts: 50.18K
+              (conv): Conv2d(
+                16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 2.3K, #flops: 7.23M, #acts: 50.18K
+              )
+              (bn): _BatchNormXd(
+                16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 32, #flops: 0.1M, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 6.43K, #flops: 20.17M, #acts: 50.18K
+              (conv): Conv2d(
+                16, 16, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 6.4K, #flops: 20.07M, #acts: 50.18K
+              )
+              (bn): _BatchNormXd(
+                16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 32, #flops: 0.1M, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (1): CSPNeXtBlock(
+            #params: 8.77K, #flops: 27.5M, #acts: 0.1M
+            (conv1): ConvModule(
+              #params: 2.34K, #flops: 7.33M, #acts: 50.18K
+              (conv): Conv2d(
+                16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 2.3K, #flops: 7.23M, #acts: 50.18K
+              )
+              (bn): _BatchNormXd(
+                16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 32, #flops: 0.1M, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 6.43K, #flops: 20.17M, #acts: 50.18K
+              (conv): Conv2d(
+                16, 16, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 6.4K, #flops: 20.07M, #acts: 50.18K
+              )
+              (bn): _BatchNormXd(
+                16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 32, #flops: 0.1M, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+    (stage2): Sequential(
+      #params: 0.23M, #flops: 0.18G, #acts: 0.45M
+      (0): ConvModule(
+        #params: 73.98K, #flops: 58M, #acts: 0.1M
+        (conv): Conv2d(
+          64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          #params: 73.73K, #flops: 57.8M, #acts: 0.1M
+        )
+        (bn): _BatchNormXd(
+          128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 0.26K, #flops: 0.2M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (1): CSPLayer(
+        #params: 0.16M, #flops: 0.12G, #acts: 0.35M
+        (main_conv): ConvModule(
+          #params: 4.16K, #flops: 3.26M, #acts: 25.09K
+          (conv): Conv2d(
+            128, 32, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 4.1K, #flops: 3.21M, #acts: 25.09K
+          )
+          (bn): _BatchNormXd(
+            32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 64, #flops: 50.18K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (short_conv): ConvModule(
+          #params: 4.16K, #flops: 3.26M, #acts: 25.09K
+          (conv): Conv2d(
+            128, 32, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 4.1K, #flops: 3.21M, #acts: 25.09K
+          )
+          (bn): _BatchNormXd(
+            32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 64, #flops: 50.18K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (final_conv): ConvModule(
+          #params: 8.45K, #flops: 6.62M, #acts: 0.1M
+          (conv): Conv2d(
+            64, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 8.19K, #flops: 6.42M, #acts: 0.1M
+          )
+          (bn): _BatchNormXd(
+            128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.26K, #flops: 0.2M, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (blocks): Sequential(
+          #params: 0.14M, #flops: 0.11G, #acts: 0.2M
+          (0): CSPNeXtBlock(
+            #params: 34.94K, #flops: 27.4M, #acts: 50.18K
+            (conv1): ConvModule(
+              #params: 9.28K, #flops: 7.28M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 9.22K, #flops: 7.23M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 25.66K, #flops: 20.12M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 25.6K, #flops: 20.07M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (1): CSPNeXtBlock(
+            #params: 34.94K, #flops: 27.4M, #acts: 50.18K
+            (conv1): ConvModule(
+              #params: 9.28K, #flops: 7.28M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 9.22K, #flops: 7.23M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 25.66K, #flops: 20.12M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 25.6K, #flops: 20.07M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (2): CSPNeXtBlock(
+            #params: 34.94K, #flops: 27.4M, #acts: 50.18K
+            (conv1): ConvModule(
+              #params: 9.28K, #flops: 7.28M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 9.22K, #flops: 7.23M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 25.66K, #flops: 20.12M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 25.6K, #flops: 20.07M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (3): CSPNeXtBlock(
+            #params: 34.94K, #flops: 27.4M, #acts: 50.18K
+            (conv1): ConvModule(
+              #params: 9.28K, #flops: 7.28M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 9.22K, #flops: 7.23M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 25.66K, #flops: 20.12M, #acts: 25.09K
+              (conv): Conv2d(
+                32, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 25.6K, #flops: 20.07M, #acts: 25.09K
+              )
+              (bn): _BatchNormXd(
+                32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 64, #flops: 50.18K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+    (stage3): Sequential(
+      #params: 0.92M, #flops: 0.18G, #acts: 0.23M
+      (0): ConvModule(
+        #params: 0.3M, #flops: 57.9M, #acts: 50.18K
+        (conv): Conv2d(
+          128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          #params: 0.29M, #flops: 57.8M, #acts: 50.18K
+        )
+        (bn): _BatchNormXd(
+          256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 0.51K, #flops: 0.1M, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (1): CSPLayer(
+        #params: 0.62M, #flops: 0.12G, #acts: 0.18M
+        (main_conv): ConvModule(
+          #params: 16.51K, #flops: 3.24M, #acts: 12.54K
+          (conv): Conv2d(
+            256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 16.38K, #flops: 3.21M, #acts: 12.54K
+          )
+          (bn): _BatchNormXd(
+            64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.13K, #flops: 25.09K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (short_conv): ConvModule(
+          #params: 16.51K, #flops: 3.24M, #acts: 12.54K
+          (conv): Conv2d(
+            256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 16.38K, #flops: 3.21M, #acts: 12.54K
+          )
+          (bn): _BatchNormXd(
+            64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.13K, #flops: 25.09K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (final_conv): ConvModule(
+          #params: 33.28K, #flops: 6.52M, #acts: 50.18K
+          (conv): Conv2d(
+            128, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 32.77K, #flops: 6.42M, #acts: 50.18K
+          )
+          (bn): _BatchNormXd(
+            256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.51K, #flops: 0.1M, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (blocks): Sequential(
+          #params: 0.56M, #flops: 0.11G, #acts: 0.1M
+          (0): CSPNeXtBlock(
+            #params: 0.14M, #flops: 27.35M, #acts: 25.09K
+            (conv1): ConvModule(
+              #params: 36.99K, #flops: 7.25M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 36.86K, #flops: 7.23M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.1M, #flops: 20.1M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.1M, #flops: 20.07M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (1): CSPNeXtBlock(
+            #params: 0.14M, #flops: 27.35M, #acts: 25.09K
+            (conv1): ConvModule(
+              #params: 36.99K, #flops: 7.25M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 36.86K, #flops: 7.23M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.1M, #flops: 20.1M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.1M, #flops: 20.07M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (2): CSPNeXtBlock(
+            #params: 0.14M, #flops: 27.35M, #acts: 25.09K
+            (conv1): ConvModule(
+              #params: 36.99K, #flops: 7.25M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 36.86K, #flops: 7.23M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.1M, #flops: 20.1M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.1M, #flops: 20.07M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (3): CSPNeXtBlock(
+            #params: 0.14M, #flops: 27.35M, #acts: 25.09K
+            (conv1): ConvModule(
+              #params: 36.99K, #flops: 7.25M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 36.86K, #flops: 7.23M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.1M, #flops: 20.1M, #acts: 12.54K
+              (conv): Conv2d(
+                64, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.1M, #flops: 20.07M, #acts: 12.54K
+              )
+              (bn): _BatchNormXd(
+                64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.13K, #flops: 25.09K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+    (stage4): Sequential(
+      #params: 3.22M, #flops: 0.16G, #acts: 0.13M
+      (0): ConvModule(
+        #params: 1.18M, #flops: 57.85M, #acts: 25.09K
+        (conv): Conv2d(
+          256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          #params: 1.18M, #flops: 57.8M, #acts: 25.09K
+        )
+        (bn): _BatchNormXd(
+          512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+          #params: 1.02K, #flops: 50.18K, #acts: 0
+        )
+        (activate): ReLU(inplace=True)
+      )
+      (1): SPPBottleneck(
+        #params: 0.66M, #flops: 32.19M, #acts: 37.63K
+        (conv1): ConvModule(
+          #params: 0.13M, #flops: 6.45M, #acts: 12.54K
+          (conv): Conv2d(
+            512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 0.13M, #flops: 6.42M, #acts: 12.54K
+          )
+          (bn): _BatchNormXd(
+            256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.51K, #flops: 25.09K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (poolings): ModuleList(
+          (0): MaxPool2d(kernel_size=5, stride=1, padding=2, dilation=1, ceil_mode=False)
+          (1): MaxPool2d(kernel_size=9, stride=1, padding=4, dilation=1, ceil_mode=False)
+          (2): MaxPool2d(kernel_size=13, stride=1, padding=6, dilation=1, ceil_mode=False)
+        )
+        (conv2): ConvModule(
+          #params: 0.53M, #flops: 25.74M, #acts: 25.09K
+          (conv): Conv2d(
+            1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 0.52M, #flops: 25.69M, #acts: 25.09K
+          )
+          (bn): _BatchNormXd(
+            512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 1.02K, #flops: 50.18K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+      )
+      (2): CSPLayer(
+        #params: 1.38M, #flops: 67.56M, #acts: 62.72K
+        (main_conv): ConvModule(
+          #params: 65.79K, #flops: 3.22M, #acts: 6.27K
+          (conv): Conv2d(
+            512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 65.54K, #flops: 3.21M, #acts: 6.27K
+          )
+          (bn): _BatchNormXd(
+            128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.26K, #flops: 12.54K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (short_conv): ConvModule(
+          #params: 65.79K, #flops: 3.22M, #acts: 6.27K
+          (conv): Conv2d(
+            512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 65.54K, #flops: 3.21M, #acts: 6.27K
+          )
+          (bn): _BatchNormXd(
+            128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 0.26K, #flops: 12.54K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (final_conv): ConvModule(
+          #params: 0.13M, #flops: 6.47M, #acts: 25.09K
+          (conv): Conv2d(
+            256, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+            #params: 0.13M, #flops: 6.42M, #acts: 25.09K
+          )
+          (bn): _BatchNormXd(
+            512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+            #params: 1.02K, #flops: 50.18K, #acts: 0
+          )
+          (activate): ReLU(inplace=True)
+        )
+        (blocks): Sequential(
+          #params: 1.12M, #flops: 54.64M, #acts: 25.09K
+          (0): CSPNeXtBlock(
+            #params: 0.56M, #flops: 27.32M, #acts: 12.54K
+            (conv1): ConvModule(
+              #params: 0.15M, #flops: 7.24M, #acts: 6.27K
+              (conv): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 0.15M, #flops: 7.23M, #acts: 6.27K
+              )
+              (bn): _BatchNormXd(
+                128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.26K, #flops: 12.54K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.41M, #flops: 20.08M, #acts: 6.27K
+              (conv): Conv2d(
+                128, 128, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.41M, #flops: 20.07M, #acts: 6.27K
+              )
+              (bn): _BatchNormXd(
+                128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.26K, #flops: 12.54K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+          (1): CSPNeXtBlock(
+            #params: 0.56M, #flops: 27.32M, #acts: 12.54K
+            (conv1): ConvModule(
+              #params: 0.15M, #flops: 7.24M, #acts: 6.27K
+              (conv): Conv2d(
+                128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+                #params: 0.15M, #flops: 7.23M, #acts: 6.27K
+              )
+              (bn): _BatchNormXd(
+                128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.26K, #flops: 12.54K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+            (conv2): ConvModule(
+              #params: 0.41M, #flops: 20.08M, #acts: 6.27K
+              (conv): Conv2d(
+                128, 128, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), bias=False
+                #params: 0.41M, #flops: 20.07M, #acts: 6.27K
+              )
+              (bn): _BatchNormXd(
+                128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True
+                #params: 0.26K, #flops: 12.54K, #acts: 0
+              )
+              (activate): ReLU(inplace=True)
+            )
+          )
+        )
+      )
+    )
+  )
+  (head): RTMCCHead(
+    #params: 0.82M, #flops: 29.25M, #acts: 0.1M
+    (loss_module): KLDiscretLoss(
+      #params: 0, #flops: N/A, #acts: N/A
+      (log_softmax): LogSoftmax(
+        dim=1
+        #params: 0, #flops: N/A, #acts: N/A
+      )
+      (kl_loss): KLDivLoss(#params: 0, #flops: N/A, #acts: N/A)
+    )
+    (final_layer): Conv2d(
+      512, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)
+      #params: 0.15M, #flops: 7.23M, #acts: 1.57K
+    )
+    (mlp): Sequential(
+      #params: 12.54K, #flops: 0.4M, #acts: 8.19K
+      (0): ScaleNorm(#params: 1, #flops: 0, #acts: 0)
+      (1): Linear(
+        in_features=49, out_features=256, bias=False
+        #params: 12.54K, #flops: 0.4M, #acts: 8.19K
+      )
+    )
+    (gau): RTMCCBlock(
+      #params: 0.43M, #flops: 14.29M, #acts: 62.46K
+      (drop_path): Identity(#params: 0, #flops: N/A, #acts: N/A)
+      (o): Linear(
+        in_features=512, out_features=256, bias=False
+        #params: 0.13M, #flops: 4.19M, #acts: 8.19K
+      )
+      (uv): Linear(
+        in_features=256, out_features=1152, bias=False
+        #params: 0.29M, #flops: 9.44M, #acts: 36.86K
+      )
+      (ln): ScaleNorm(#params: 1, #flops: 0, #acts: 0)
+      (act_fn): ReLU(inplace=True)
+      (res_scale): Scale(#params: 0.26K, #flops: 0, #acts: 0)
+    )
+    (cls_x): Linear(
+      in_features=256, out_features=448, bias=False
+      #params: 0.11M, #flops: 3.67M, #acts: 14.34K
+    )
+    (cls_y): Linear(
+      in_features=256, out_features=448, bias=False
+      #params: 0.11M, #flops: 3.67M, #acts: 14.34K
+    )
+  )
+)
